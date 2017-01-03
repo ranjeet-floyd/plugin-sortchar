@@ -12,7 +12,6 @@ import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 public class SortCharTokenizer extends Tokenizer {
-
     /*
      * Lucene uses attributes to store information about a single token. For
      * this tokenizer, the
@@ -26,13 +25,12 @@ public class SortCharTokenizer extends Tokenizer {
      * you register
      * attributes, whatever their type, using the addAttribute() function.
      */
+
     protected CharTermAttribute charTermAttribute = addAttribute(CharTermAttribute.class);
 
     /*
      * This is the important function to override from the Tokenizer class. At
-     * each call, it
-     * should set the value of this.charTermAttribute to the text of the next
-     * token. It returns
+     * each call. It returns
      * true if a new token is generated and false if there are no more tokens
      * remaining.
      */
@@ -41,21 +39,8 @@ public class SortCharTokenizer extends Tokenizer {
 
         // Clear anything that is already saved in this.charTermAttribute
         this.charTermAttribute.setEmpty();
-
-        // Get the position of the next + symbol
-        int nextIndex = this.stringToTokenize.indexOf('+', this.position);
-//        System.out.println("********************************");
-//        System.out.println("stringToTokenize :" + stringToTokenize);
-        // Execute this block if a plus symbol was found. Save the token and the
-        // position to start at when incrementToken() is next called.
-        if (nextIndex != -1) {
-            String nextToken = this.stringToTokenize.substring(this.position, nextIndex);
-            this.charTermAttribute.append(nextToken);
-            this.position = nextIndex + 1;
-            return true;
-        } // Execute this block if no more + signs are found, but there is still some text
-        // remaining in the string. For example, this saves “text” in “This+is++some+text”.
-        else if (this.position < this.stringToTokenize.length()) {
+        //pass everthing
+        if (this.position < this.stringToTokenize.length()) {
             String nextToken = this.stringToTokenize.substring(this.position);
             this.charTermAttribute.append(nextToken);
             this.position = this.stringToTokenize.length();
@@ -93,12 +78,9 @@ public class SortCharTokenizer extends Tokenizer {
             throw new RuntimeException(e);
         }
 
-        this.stringToTokenize = stringBuilder.toString();
-        System.out.println("Before SortTokenizer stringToTokenize : " + this.stringToTokenize);
         char[] stringBuilderChars = stringBuilder.toString().toLowerCase(Locale.US).toCharArray();
         Arrays.sort(stringBuilderChars);
         this.stringToTokenize = new String(stringBuilderChars);
-        System.out.println("SortTokenizer stringToTokenize : " + this.stringToTokenize);
 
     }
 
